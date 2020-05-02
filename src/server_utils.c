@@ -140,7 +140,7 @@ int accept_connection(const int server_fd)
                     sbuf, sizeof(sbuf),
                     NI_NUMERICHOST | NI_NUMERICHOST) == 0) {
         logger(DEBUG, "Accepted connection on descriptor %d (host=%s, port=%s)",
-                client_fd, hbuf, sbuf);
+               client_fd, hbuf, sbuf);
     }
 
     return client_fd;

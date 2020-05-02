@@ -74,10 +74,10 @@ static int is_number(char *str)
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-  struct arguments *arguments = state->input;
-  char *tmp;
+    struct arguments *arguments = state->input;
+    char *tmp;
 
-  switch (key)
+    switch (key)
     {
     case 'q':
         arguments->quiet = true;
@@ -89,44 +89,44 @@ static error_t parse_opt (int key, char *arg, struct argp_state *state)
         arguments->ip = arg;
         break;
     case 'p':
-      if(is_number(arg) != 0)
-      {
-          printf("Input port value not a number! (%s)\n", arg);
-          return -1;
-      }
-      unsigned long tmp_port = strtoul(arg, &tmp, 10);
-      if (tmp_port > USHRT_MAX)
-      {
-          printf("Input port value not a number! (%s)\n", arg);
-          return -1;
-      }
-      arguments->port = (uint16_t)tmp_port;
-      break;
+        if(is_number(arg) != 0)
+        {
+            printf("Input port value not a number! (%s)\n", arg);
+            return -1;
+        }
+        unsigned long tmp_port = strtoul(arg, &tmp, 10);
+        if (tmp_port > USHRT_MAX)
+        {
+            printf("Input port value not a number! (%s)\n", arg);
+            return -1;
+        }
+        arguments->port = (uint16_t)tmp_port;
+        break;
     case 'd':
-      arguments->daemonize = 1;
-      break;
+        arguments->daemonize = 1;
+        break;
 
 
     default:
-      return ARGP_ERR_UNKNOWN;
+        return ARGP_ERR_UNKNOWN;
     }
-  return 0;
+    return 0;
 }
 
 static int parse_parameters(int argc, char **argv, struct arguments *arguments)
 {
     struct argp_option options[] = {
-      {"quiet"    , 'q',  NULL    , 0,  "Print only error messages", 0},
-      {"verbose"  , 'V',  NULL    , 0,  "Print debug messages", 0},
-      {"ip"       , 'i', "address", 0,  "Server ip address (default: localhost)", 0},
-      {"port"     , 'p', "port"   , 0,  "Server TCP port (default: 5000)", 0},
-      {"daemonize", 'd',  NULL    , 0,  "Run as a daemon", 0},
-      { 0 },
+        {"quiet", 'q',  NULL, 0,  "Print only error messages", 0},
+        {"verbose", 'V',  NULL, 0,  "Print debug messages", 0},
+        {"ip", 'i', "address", 0,  "Server ip address (default: localhost)", 0},
+        {"port", 'p', "port", 0,  "Server TCP port (default: 5000)", 0},
+        {"daemonize", 'd',  NULL, 0,  "Run as a daemon", 0},
+        { 0 },
     };
     char *doc = "This is a computation server which receives video files from"
-            "dash cams, calculating a number of computation-intensive driver "
-            "behaviour indicators, and sending these back "
-            "to the vehicle in the same connection";
+                "dash cams, calculating a number of computation-intensive driver "
+                "behaviour indicators, and sending these back "
+                "to the vehicle in the same connection";
     struct argp argp = {options, parse_opt, NULL, doc, NULL, NULL, NULL};
 
     return argp_parse(&argp, argc, argv, 0, 0, arguments);
@@ -134,11 +134,11 @@ static int parse_parameters(int argc, char **argv, struct arguments *arguments)
 
 int main(int argc, char **argv) {
     struct arguments arguments = {
-            .ip = DEFAILT_IP,
-            .port = DEFAULT_PORT,
-            .quiet = false,
-            .verbose = false,
-            .daemonize = 0
+        .ip = DEFAILT_IP,
+        .port = DEFAULT_PORT,
+        .quiet = false,
+        .verbose = false,
+        .daemonize = 0
     };
 
     int operation = -1;

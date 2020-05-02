@@ -214,7 +214,7 @@ static int manage_lanes_workers(thread_pool_t *pool, lanes_manage_action_t actio
     }
     if (action == LANES_FIRST_TIME_INIT && thread_pool_lanes == NULL)
     {
-       goto exit;
+        goto exit;
     }
 
     for (i = 0; i < pool->lanes_count; i++)

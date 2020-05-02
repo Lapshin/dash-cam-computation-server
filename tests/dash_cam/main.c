@@ -21,32 +21,32 @@ struct arguments
 
 static error_t parse_opt (int key, char *arg, struct argp_state *state)
 {
-  struct arguments *arguments = state->input;
+    struct arguments *arguments = state->input;
 
-  switch(key)
+    switch(key)
     {
     case 's':
-      arguments->size = (uint32_t) atoll(arg);
-      break;
+        arguments->size = (uint32_t) atoll(arg);
+        break;
     case 'f':
-      arguments->frame_size = (uint32_t) atoll(arg);
-      break;
+        arguments->frame_size = (uint32_t) atoll(arg);
+        break;
     case 'r':
-      arguments->read = true;
-      break;
+        arguments->read = true;
+        break;
     default:
-      return ARGP_ERR_UNKNOWN;
+        return ARGP_ERR_UNKNOWN;
     }
-  return 0;
+    return 0;
 }
 
 static int parse_parameters(struct arguments *arguments, int argc, char **argv)
 {
     struct argp_option options[] = {
-      {"size", 's', "size", 0,  "size of generated data in bytes", 0},
-      {"frame-size", 'f', "frame-size", 0,  "size of one frame in bytes", 0},
-      {"read", 'r', NULL, 0, "reaading data from stdout", 0},
-      { 0 }
+        {"size", 's', "size", 0,  "size of generated data in bytes", 0},
+        {"frame-size", 'f', "frame-size", 0,  "size of one frame in bytes", 0},
+        {"read", 'r', NULL, 0, "reaading data from stdout", 0},
+        { 0 }
     };
 
     char *doc = "This is a dash cam simulator";
@@ -147,9 +147,9 @@ int main(int argc, char **argv)
 {
     message_t *data_to_send = NULL;
     struct arguments arguments = {
-            .size = 512,
-            .frame_size = 32,
-            .read = false
+        .size = 512,
+        .frame_size = 32,
+        .read = false
     };
     size_t i;
     int ret = parse_parameters(&arguments, argc, argv);

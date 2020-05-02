@@ -49,9 +49,9 @@ uint64_t indicator_extract(const indicator_ctx_t *ctx)
 
 static indicators_handlers_t indicators_handlers[] =
 {
-        {&indicator_alloc, &indicator_init, &indicator_free, &indicator, &indicator_extract},
-        {&indicator_alloc, &indicator_init, &indicator_free, &indicator, &indicator_extract},
-        {&indicator_alloc, &indicator_init, &indicator_free, &indicator, &indicator_extract},
+    {&indicator_alloc, &indicator_init, &indicator_free, &indicator, &indicator_extract},
+    {&indicator_alloc, &indicator_init, &indicator_free, &indicator, &indicator_extract},
+    {&indicator_alloc, &indicator_init, &indicator_free, &indicator, &indicator_extract},
 };
 
 

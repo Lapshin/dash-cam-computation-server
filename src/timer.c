@@ -67,7 +67,7 @@ int timer_arm(time_t seconds)
     if (ret != 0)
     {
         logger(ERROR, "Error while %sarming timer (%d:%s)",
-                seconds ? "" : "dis", errno, strerror(errno));
+               seconds ? "" : "dis", errno, strerror(errno));
     }
     return ret;
 }

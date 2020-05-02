@@ -89,8 +89,8 @@ static size_t get_file_size(const messageHeader_t *header)
 
     if (size > MAX_FILE_SIZE)
     {
-         logger(ERROR, "file size is too big (%lu). Max size is %lu", size, MAX_FILE_SIZE);
-         size = 0;
+        logger(ERROR, "file size is too big (%lu). Max size is %lu", size, MAX_FILE_SIZE);
+        size = 0;
     }
     return size;
 }
@@ -102,13 +102,13 @@ static size_t get_frame_size(const messageHeader_t *header)
 
     if (frame_size > size)
     {
-         logger(ERROR, "frame size is too big (%lu). file size is %lu", frame_size, size);
-         frame_size = 0;
+        logger(ERROR, "frame size is too big (%lu). file size is %lu", frame_size, size);
+        frame_size = 0;
     }
     if (size%frame_size != 0)
     {
-         logger(ERROR, "Can not divide size by frame size (%lu%%%lu != 0)", size, frame_size);
-         frame_size = 0;
+        logger(ERROR, "Can not divide size by frame size (%lu%%%lu != 0)", size, frame_size);
+        frame_size = 0;
     }
     return frame_size;
 }
@@ -145,9 +145,9 @@ void calc_indicators(const uint8_t *data, const size_t size)
 {
     size_t i;
     indicator_arg_t arg_pattern = {
-            .ctx = NULL,
-            .data = data,
-            .size = size
+        .ctx = NULL,
+        .data = data,
+        .size = size
     };
     for (i = 0; i < indicators_count; i++)
     {
