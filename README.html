@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8' ?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	</head>
+	<body>
+		<h1 id="computation-server">Computation server</h1>
+		<p>This is a computation server for dash cam footage. It calculates indicators
+			metrics from received file and send results back.</p>
+		<h2 id="building-the-project">Building the project</h2>
+		<p>In the project root:</p>
+		<pre><code>mkdir build
+cd build
+cmake ../
+make</code></pre>
+		<h2 id="running-the-tests">Running the tests</h2>
+		<p>After project built, in the build directory:</p>
+		<pre><code>make test</code></pre>
+		<h2 id="running-the-server">Running the server</h2>
+		<p>From the build directory:</p>
+		<pre><code>./computation-server</code></pre>
+		<p>If you want to use your own library:</p>
+		<pre><code>LD_PRELOAD=&lt;PATH_TO_YOUR_LIB&gt; ./computation-server</code></pre>
+		<p>or</p>
+		<pre><code>LD_LIBRARY_PATH=&lt;PATH_TO_DIR_WITH_LIB&gt; ./build/server</code></pre>
+		<h2 id="usage">Usage</h2>
+		<pre><code>$ ./computation-server --help   
+Usage: computation-server [OPTION...]
+This is a computation server which receives video files fromdash cams,
+calculating a number of computation-intensive driver behaviour indicators, and
+sending these back to the vehicle in the same connection
+
+  -d, --daemonize            Run as a daemon
+  -i, --ip=address           Server ip address (default: localhost)
+  -p, --port=port            Server TCP port (default: 5000)
+  -q, --quiet                Print only error messages
+  -V, --verbose              Print debug messages
+  -?, --help                 Give this help list
+      --usage                Give a short usage message
+      --version              Print program version
+
+Mandatory or optional arguments to long options are also mandatory or optional
+for any corresponding short options.
+
+Report bugs to &lt;alexeyfonlapshin@gmail.com&gt;.
+</code></pre>
+		<h2 id="dash-cam-simulation">Dash cam simulation</h2>
+		<p>If you want to simulate dash cam client use command from build dir:</p>
+		<pre><code>./tests/dash_cam -s 80000000 -f 1000 | pv -L 2621440 | nc -q 2 localhost 5000 | ./tests/dash_cam -r</code></pre>
+		<ul>
+			<li>It will print 4 indicator results into stdout.</li>
+			<li>Video file size is 80000000 bytes and frame size is 1000. Frame size - it is minimum size of data indicator could process.</li>
+			<li>Video file transmitting speed limit is 20 Mbit/s, you can tune it in 
+				<code>pv</code> argument.
+			</li>
+			<li>Indicators in the project's library processing data with speed limit 5 MB/s.</li>
+		</ul>
+		<h2 id="server-design">Server design</h2>
+		<p>The design is very simple. It is main thread which operates with server socket able to 
+			establish one IPv4 TCP connection per session. And X thread workers for indicators calculation, where X number of indicators from the library.
+			After all initializations, in the loop we have simple steps:</p>
+		<ul>
+			<li>Allocate all data which could be alocated before running main loop </li>
+			<li>Waiting for new client until it appears</li>
+			<li>Arm timer for 35 seconds</li>
+			<li>Accept connection</li>
+			<li>Receive and process data in parallel</li>
+			<li>After calculation finished, send response to the dash cam</li>
+			<li>Cleanup all used resources (free buffers, close socket ...)</li>
+		</ul>
+		<p>If Timer expires while processing video file, or any error appears - all progress will dismiss and program will go to the second step </p>
+		<p>
+			<img alt="" border="0" src="doc/diagram.png"/>
+		</p>
+		<h3 id="communication-between-computation-server-and-dash-cam">Communication between computation server and dash cam</h3>
+		<p>There are two types of messages: message from dash cam with 
+			video file inside AND message for dash cam with calculated metrics inside</p>
+		<p>Both messages used the same header which declared in include/dash_cam.h</p>
+		<h2 id="author">Author</h2>
+		<p>Alexey Lapshin</p>
+		<h2 id="todo-list">TODO list</h2>
+		<ul>
+			<li>[ ] cmake: implement target Debug and Release</li>
+			<li>[ ] cmake: implement make install</li>
+			<li>[ ] tests: detect if port already taken, get random unused port</li>
+			<li>[ ] implement crc32 hash sum, for checking video files</li>
+			<li>[ ] check if indicators count more than X</li>
+		</ul>
+	</body>
+</html>
